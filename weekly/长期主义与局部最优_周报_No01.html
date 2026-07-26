@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>长期主义与局部最优 · 周报 No.01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --paper: #F1EEE3;
+    --card: #FCFAF2;
+    --ink: #23190F;
+    --ink-soft: #6B5B47;
+    --ink-faint: #9C8C74;
+    --line: rgba(122, 78, 20, 0.16);
+    --line-strong: rgba(122, 78, 20, 0.32);
+    --accent: #2F6F5E;
+    --accent-soft: rgba(47, 111, 94, 0.11);
+    --grid: rgba(122, 78, 20, 0.05);
+    --seal: #2A3B8F;
+
+    --serif: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+    --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Menlo", monospace;
+
+    --measure: 42rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #17130D; --card: #211A10; --ink: #EFE6D6; --ink-soft: #BBA98C;
+      --ink-faint: #82735C; --line: rgba(87, 160, 140, 0.18); --line-strong: rgba(87, 160, 140, 0.36);
+      --accent: #57A08C; --accent-soft: rgba(87, 160, 140, 0.14); --grid: rgba(87, 160, 140, 0.05);
+      --seal: #8C9AEF;
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #F1EEE3; --card: #FCFAF2; --ink: #23190F; --ink-soft: #6B5B47;
+    --ink-faint: #9C8C74; --line: rgba(122,78,20,0.16); --line-strong: rgba(122,78,20,0.32);
+    --accent: #2F6F5E; --accent-soft: rgba(47,111,94,0.11); --grid: rgba(122,78,20,0.05); --seal: #2A3B8F;
+  }
+  :root[data-theme="dark"] {
+    --paper: #17130D; --card: #211A10; --ink: #EFE6D6; --ink-soft: #BBA98C;
+    --ink-faint: #82735C; --line: rgba(87,160,140,0.18); --line-strong: rgba(87,160,140,0.36);
+    --accent: #57A08C; --accent-soft: rgba(87,160,140,0.14); --grid: rgba(87,160,140,0.05); --seal: #8C9AEF;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 26px 26px; color: var(--ink); font-family: var(--sans);
+    font-size: 17px; line-height: 1.75; letter-spacing: 0.01em; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 22px; }
+
+  .topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar-inner { max-width: var(--measure); margin: 0 auto; padding: 12px 22px; display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+  .topbar a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; }
+  .topbar a:hover { color: var(--accent); }
+  .share-btn { border: 1px solid var(--line-strong); background: transparent; color: var(--ink-soft); font: inherit; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 12px; border-radius: 2px; cursor: pointer; transition: .18s; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  header.hero { padding: 68px 0 30px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 26px; }
+  .tag { border: 1px solid var(--line-strong); color: var(--accent); padding: 3px 9px; border-radius: 2px; letter-spacing: 0.08em; }
+  h1.title { font-family: var(--serif); font-size: clamp(2.6rem, 8vw, 4.2rem); line-height: 1.06; font-weight: 700; margin: 0 0 6px; letter-spacing: 0.02em; text-wrap: balance; }
+  .subtitle-en { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 22px; }
+  .byline { font-family: var(--sans); font-size: 15px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 6px 16px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .byline b { color: var(--ink); font-weight: 600; }
+  .lede { font-family: var(--serif); font-size: clamp(1.28rem, 3.4vw, 1.6rem); line-height: 1.62; color: var(--ink); margin: 40px 0 10px; text-wrap: pretty; }
+  .lede .accent { color: var(--accent); }
+
+  section { padding: 46px 0; border-top: 1px solid var(--line); }
+  .part-label { display: flex; align-items: baseline; gap: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .part-num { color: var(--accent); font-weight: 600; }
+  .part-rule { flex: 1; height: 1px; background: var(--line); align-self: center; }
+  h2 { font-family: var(--serif); font-weight: 700; font-size: clamp(1.7rem, 5vw, 2.3rem); line-height: 1.2; margin: 0 0 4px; letter-spacing: 0.02em; text-wrap: balance; }
+  .h2-en { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 22px; }
+  p { margin: 0 0 18px; }
+  p .k { color: var(--accent); font-weight: 600; }
+  strong { font-weight: 600; }
+
+  blockquote { margin: 26px 0; padding: 4px 0 4px 22px; border-left: 2px solid var(--accent); font-family: var(--serif); font-size: 1.18rem; line-height: 1.6; color: var(--ink); }
+  blockquote cite { display: block; font-family: var(--mono); font-style: normal; font-size: 11.5px; letter-spacing: 0.08em; color: var(--ink-faint); text-transform: uppercase; margin-top: 10px; }
+
+  .takeaways { list-style: none; padding: 0; margin: 24px 0 0; counter-reset: t; display: grid; gap: 12px; }
+  .takeaways li { counter-increment: t; background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 16px 18px 16px 54px; position: relative; line-height: 1.6; }
+  .takeaways li::before { content: counter(t, decimal-leading-zero); position: absolute; left: 16px; top: 16px; font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: 0.04em; }
+  .takeaways li b { color: var(--ink); }
+  .takeaways li span { color: var(--ink-soft); font-size: 0.94rem; }
+
+  footer { padding: 50px 0 70px; border-top: 1px solid var(--line); text-align: center; }
+  footer .seal { display: inline-flex; align-items: center; justify-content: center; width: 62px; height: 62px; border: 2px solid var(--seal); color: var(--seal); border-radius: 4px; font-family: var(--serif); font-size: 1.5rem; font-weight: 700; transform: rotate(-4deg); margin-bottom: 18px; line-height: 1; }
+  footer p { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: 4px 0; }
+
+  @media (max-width: 620px) { body { font-size: 16px; } }
+  @media (prefers-reduced-motion: no-preference) { .share-btn, .topbar a { transition: color .18s, border-color .18s; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html#weekly">← 返回首页</a>
+    <button class="share-btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent='链接已复制'">分享</button>
+  </div>
+</div>
+
+<div class="wrap" id="top">
+  <header class="hero">
+    <div class="meta-row">
+      <span class="tag">周报 No.01</span>
+      <span>李小台 · Leah</span>
+      <span>·</span>
+      <span>2026.07.24</span>
+    </div>
+    <h1 class="title">长期主义与局部最优</h1>
+    <div class="subtitle-en">Long-termism and Local Optima</div>
+
+    <p class="lede">
+      这周做了很多不同的事——本地化的产品设计、一个社交竞技功能的取舍、还有对管理动作的一次观察。
+      但抽出来看，最后都指向同一件事：<span class="accent">长期主义和局部最优不是对立的</span>，
+      真正的判断力，是知道什么时候该为局部最优让路，什么时候局部最优本身就是陷阱。
+    </p>
+  </header>
+
+  <!-- PART I -->
+  <section>
+    <div class="part-label"><span class="part-num">PART I</span><span>本地化</span><span class="part-rule"></span></div>
+    <h2>同一个功能，没有统一最优解</h2>
+    <div class="h2-en">Localization has no universal answer</div>
+    <p>
+      这周在重新设计注册登录页——Google 登录、微信登录、苹果登录、邮箱登录，都是很常见的功能，
+      但把它们摆在同一个页面上时才发现：<strong>没有一套默认顺序能通吃所有市场</strong>。
+      国内用户几乎默认认微信；海外市场里，Google 和苹果谁该排在前面，本身就因地区而异；
+      纯邮箱注册的人群，需要的不是更多社交登录入口，而是更顺手的密码设置流程。
+      同一页面、同一组按钮，换一个市场，"最优默认项"就得重新排一遍。
+    </p>
+    <p>
+      真正的体会是：<strong>"通用方案"往往就是"平庸方案"</strong>。做出海产品，本地化产品设计和运营，
+      是这个阶段绕不开的核心能力，而不是上线后再补的本地化包装。
+    </p>
+    <blockquote>
+      为所有市场设计的方案，通常谁也不是最优解。
+    </blockquote>
+  </section>
+
+  <!-- PART II -->
+  <section>
+    <div class="part-label"><span class="part-num">PART II</span><span>取舍</span><span class="part-rule"></span></div>
+    <h2>一个诚实的先上</h2>
+    <div class="h2-en">An honest tradeoff, not self-persuasion</div>
+    <p>
+      这周把一个社交竞技类功能的定位彻底钉死了。过程里很清醒地意识到：弱社交机制——排行榜、
+      好友邀请、对战这一类——未必是长线留存的答案，它更像是一个能<strong>快速看到反馈</strong>的杠杆，
+      而不是必然带来持久粘性的护城河。真正决定长线留存的，大概率还是课程和内容本身的质量。
+    </p>
+    <p>
+      但还是决定先上它——原因很实际：内容和课程的改进，要在留存数据上体现出效果，周期太长，
+      而团队等不起。这不是自我说服"这个一定有效"，而是承认"这个不是最优解，但是当下能做、
+      能最快看到反馈的那一个"。
+    </p>
+    <blockquote>
+      知道一件事不是终局答案，仍然选择先做它——这是判断，不是妥协。
+    </blockquote>
+  </section>
+
+  <!-- PART III -->
+  <section>
+    <div class="part-label"><span class="part-num">PART III</span><span>管理</span><span class="part-rule"></span></div>
+    <h2>盯得太紧，管理动作会变形</h2>
+    <div class="h2-en">Over-focus distorts how you manage</div>
+    <p>
+      这周观察到一个更普遍的现象：当管理者把全部注意力收窄到某一件事、某一个目标上时，
+      管理动作本身会开始变形——用这一件事去评价所有人、分配所有资源、决定谁该被认可、谁该被批评。
+      慢慢地，管理不再是为了把团队和事情本身带好，而是变成了服务于这一件被过度关注的事。
+    </p>
+    <p>
+      初心明明是把人和事都带好，但盯得太紧之后，动作本身跑偏了方向，甚至连管理者自己都未必意识到。
+      <strong>过度关注本身也是一种风险</strong>，需要时不时退一步，确认自己还站在出发时想去的地方。
+    </p>
+    <blockquote>
+      管理者盯得越紧的那件事，团队的行为就会越围着它变形，而不是围着目标本身。
+    </blockquote>
+  </section>
+
+  <footer>
+    <div class="seal">思</div>
+    <p>周报 No.01 · 李小台 Leah</p>
+    <p>本地化 · 取舍 · 管理</p>
+  </footer>
+</div>
+</body>
+</html>
